@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap');
+
+:root { font-family: 'DM Sans', sans-serif; color: #16372b; background: #f3f1e9; font-synthesis: none; --green:#174c3a; --lime:#d5eb72; --cream:#f8f6ef; --orange:#e7743d; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: radial-gradient(circle at 80% 0%, #e7eccd 0, transparent 32%), #f3f1e9; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+.shell { width:min(100% - 32px, 520px); margin:auto; min-height:100vh; padding:28px 0 max(28px,env(safe-area-inset-bottom)); }
+.brand { display:flex; align-items:center; gap:13px; }
+.brand h1 { font:800 34px/1 'Fraunces',serif; margin:2px 0; letter-spacing:-1px; }
+.eyebrow { margin:0; color:#708078; font-size:11px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; }
+.logo { width:52px; height:58px; border-radius:50% 50% 12px 12px; background:var(--green); color:var(--lime); display:grid; place-items:center; transform:rotate(-4deg); box-shadow:inset 0 -5px 0 #0d3b2c; }
+.logo span { font:700 17px 'Fraunces',serif; border:2px solid currentColor; width:33px; height:33px; border-radius:50%; display:grid; place-items:center; }
+.hero { text-align:center; padding:48px 0 30px; }
+.hero .kicker { text-transform:uppercase; font-size:12px; letter-spacing:3px; font-weight:700; margin:0; }
+.hero>p:last-child { color:#6c7d76; margin:5px 0 0; }
+.fifty { font:800 100px/.95 'Fraunces',serif; letter-spacing:-7px; color:var(--green); }
+.fifty span { font:700 15px 'DM Sans'; letter-spacing:0; margin-left:8px; }
+.card { background:rgba(255,255,255,.72); border:1px solid rgba(22,55,43,.1); border-radius:24px; padding:22px; box-shadow:0 12px 35px rgba(34,64,48,.06); }
+.section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.section-heading h2 { margin:3px 0 0; font:700 22px 'Fraunces',serif; }
+.section-heading>span { font-size:12px; font-weight:700; color:#718078; background:#eceee5; padding:7px 10px; border-radius:99px; }
+.add-form { display:flex; gap:8px; }
+.add-form input { min-width:0; flex:1; border:1px solid #cbd2c7; border-radius:13px; padding:14px 15px; background:white; outline:none; }
+.add-form input:focus { border-color:var(--green); box-shadow:0 0 0 3px #174c3a1a; }
+.add-form button { width:50px; border:0; border-radius:13px; background:var(--lime); color:var(--green); display:grid; place-items:center; }
+.player-list { display:grid; gap:8px; margin-top:14px; }
+.empty { padding:24px; text-align:center; color:#849089; }
+.empty svg { opacity:.45; }.empty p{margin:8px 0 0;font-size:13px}
+.setup-player { display:flex; align-items:center; gap:12px; background:#f5f5ef; border-radius:13px; padding:10px; }
+.setup-player strong { flex:1; }.setup-player button { border:0; background:none; color:#8b9690; padding:7px; }
+.order { width:29px; height:29px; border-radius:50%; background:#e4e7de; display:grid; place-items:center; font-size:12px; font-weight:700; flex:0 0 auto; }
+.wins { display:flex; gap:4px; align-items:center; color:#a75b2d; font-weight:700; font-size:13px; }
+.primary,.secondary { width:100%; min-height:56px; border:0; border-radius:16px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px; }
+.primary { background:var(--green); color:white; margin-top:18px; box-shadow:0 8px 20px #174c3a33; }.primary:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#e2e6dd;color:var(--green);margin-top:9px}
+.hint,.text-button { display:block; text-align:center; font-size:12px; color:#7b8881; }.hint{margin:10px}.text-button{border:0;background:none;margin:16px auto;text-decoration:underline}
+.game-layout { min-height:100vh; padding-bottom:max(24px,env(safe-area-inset-bottom)); }
+.game-header { height:84px; display:flex; align-items:center; justify-content:space-between; padding:12px max(20px,calc((100vw - 1050px)/2)); }
+.brand.compact .logo{width:40px;height:45px}.brand.compact .logo span{width:27px;height:27px;font-size:13px}.brand.compact h1{font-size:25px}
+.icon-button{border:1px solid #d2d7ce;background:#ffffff99;color:var(--green);width:42px;height:42px;border-radius:50%;display:grid;place-items:center}
+.turn-banner { background:var(--green); color:white; padding:20px max(22px,calc((100vw - 1050px)/2)); display:flex; justify-content:space-between; align-items:center; }
+.turn-banner p{margin:0;color:#b6c9bd;text-transform:uppercase;font-size:10px;font-weight:700;letter-spacing:1.7px}.turn-banner h2{font:700 29px 'Fraunces';margin:3px 0 0}
+.score-bubble{display:flex;align-items:baseline;gap:4px;background:#ffffff12;border:1px solid #ffffff22;padding:9px 15px;border-radius:14px}.score-bubble b{font:700 29px 'Fraunces'}.score-bubble span{font-size:12px;color:#c7d4cb}
+.game-content { width:min(100% - 28px,1050px); margin:22px auto; display:grid; grid-template-columns:minmax(0,1.45fr) minmax(290px,.75fr); gap:20px; align-items:start; }
+.score-panel { background:var(--cream); border-radius:25px; padding:24px; border:1px solid #e0e0d5; }
+.score-prompt { display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.score-prompt h3{font:700 23px 'Fraunces';margin:3px 0}.pending-score{display:flex;align-items:baseline;gap:5px;background:#e6e7df;padding:8px 12px;border-radius:12px;color:#819087}.pending-score.active{background:var(--lime);color:var(--green)}.pending-score span{font-size:10px;text-transform:uppercase;font-weight:700}.pending-score b{font-size:24px}
+.formation { background:linear-gradient(160deg,#ded8c2,#eae5d3); border-radius:20px; padding:19px 8px; display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:inset 0 2px 12px #544d3420; }
+.skittle-row { display:flex;justify-content:center;gap:5px; }
+.skittle { position:relative; border:0; width:67px;height:63px;border-radius:50% 50% 15px 15px;background:linear-gradient(100deg,#eee3c4,#cdbb8e);color:#263c31;box-shadow:inset -7px -5px 10px #826f4633,0 3px 2px #6d624940;transition:.12s transform,.12s background; }
+.skittle b{font:800 22px 'Fraunces'}.skittle span{position:absolute;right:4px;top:3px;width:20px;height:20px}.skittle.selected{background:var(--green);color:white;transform:translateY(-3px);box-shadow:0 5px 0 #0c3528}.skittle:active{transform:scale(.95)}
+.rule-note{text-align:center;color:#78847e;font-size:11px;margin:13px 0 17px}.actions{display:grid;grid-template-columns:.85fr 1.15fr;gap:9px}.actions button{min-height:55px;border-radius:15px;border:0;font-weight:700;display:flex;justify-content:center;align-items:center;gap:7px}.miss-button{background:#e8e5dc;color:#6f5c54}.miss-button.chosen{background:#fee0d3;color:#9d3e19;box-shadow:inset 0 0 0 2px var(--orange)}.confirm-button{background:var(--green);color:white}.confirm-button:disabled{opacity:.35;cursor:not-allowed}
+.scoreboard{padding:19px}.score-row{display:flex;align-items:center;gap:11px;padding:11px 8px;border-radius:13px}.score-row+.score-row{border-top:1px solid #e4e6df}.score-row.current{background:#e7f0bd;border:0}.score-row.current .order{background:var(--green);color:white}.score-row.eliminated{opacity:.45}.player-meta{flex:1;min-width:0}.player-meta strong,.player-meta small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.player-meta small{font-size:11px;color:#7e8983;margin-top:2px}.player-score{font:700 24px 'Fraunces'}.finish-shell{display:flex;flex-direction:column}.winner-card{text-align:center;padding:55px 0 28px}.trophy-ring{width:105px;height:105px;border-radius:50%;background:var(--lime);display:grid;place-items:center;margin:0 auto 22px;box-shadow:0 0 0 12px #d5eb7244;color:var(--green)}.winner-card h2{font:800 42px 'Fraunces';margin:7px 0}.winner-card>p:last-child{color:#78847e;margin:0}.standings{margin-bottom:2px}.standing{display:flex;align-items:center;gap:13px;padding:10px}.standing>span{color:#9ba39e;font-size:12px}.standing strong{flex:1}.standing b{display:flex;gap:5px;align-items:center;color:#a75b2d}
+@media(max-width:760px){.game-content{grid-template-columns:1fr}.scoreboard{order:-1}.scoreboard .section-heading{margin-bottom:6px}.score-row{padding:8px}.game-header{padding:12px 18px}.turn-banner{padding:17px 20px}.score-panel{padding:18px 12px}.skittle{width:64px;height:61px}.game-content{margin-top:14px}.scoreboard{padding:15px}.score-row:not(.current){display:none}}
+@media(max-width:370px){.skittle{width:57px;height:56px}.skittle-row{gap:3px}.score-panel{padding:15px 7px}.actions{grid-template-columns:1fr 1fr}.fifty{font-size:86px}}
