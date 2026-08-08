@@ -28,7 +28,8 @@ button { cursor: pointer; }
 .empty { padding:24px; text-align:center; color:#849089; }
 .empty svg { opacity:.45; }.empty p{margin:8px 0 0;font-size:13px}
 .setup-player { display:flex; align-items:center; gap:12px; background:#f5f5ef; border-radius:13px; padding:10px; }
-.setup-player strong { flex:1; }.setup-player button { border:0; background:none; color:#8b9690; padding:7px; }
+.setup-player strong { flex:1; min-width:0; }.setup-player button { border:0; background:none; color:#8b9690; padding:7px; }
+.player-avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; flex:0 0 auto; }.player-avatar.placeholder { display:grid; place-items:center; background:#e4e7de; color:#7b8881; }.photo-button { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; color:#708078; background:#e8ebe3; cursor:pointer; flex:0 0 auto; }.photo-button input { display:none; }
 .order { width:29px; height:29px; border-radius:50%; background:#e4e7de; display:grid; place-items:center; font-size:12px; font-weight:700; flex:0 0 auto; }
 .wins { display:flex; gap:4px; align-items:center; color:#a75b2d; font-weight:700; font-size:13px; }
 .primary,.secondary { width:100%; min-height:56px; border:0; border-radius:16px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px; }

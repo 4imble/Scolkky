@@ -1,8 +1,8 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { Check, ChevronRight, Plus, RotateCcw, Trophy, UserRound, X } from 'lucide-react';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react';
+import { Camera, Check, ChevronRight, Plus, RotateCcw, Trophy, UserRound, X } from 'lucide-react';
 
 type Phase = 'setup' | 'playing' | 'finished';
-type Player = { id: string; name: string; score: number; wins: number; misses: number; eliminated: boolean };
+type Player = { id: string; name: string; score: number; wins: number; misses: number; eliminated: boolean; photo?: string };
 type GameState = { players: Player[]; phase: Phase; turnIndex: number; winnerId: string | null };
 
 const STORAGE_KEY = 'molkky-scorekeeper-v1';
@@ -65,6 +65,18 @@ export default function App() {
     setGame((old) => ({ ...old, players: old.players.filter((player) => player.id !== id) }));
   }
 
+  function updatePlayerPhoto(id: string, event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') return;
+      setGame((old) => ({ ...old, players: old.players.map((player) => player.id === id ? { ...player, photo: reader.result as string } : player) }));
+    };
+    reader.readAsDataURL(file);
+    event.target.value = '';
+  }
+
   function startGame() {
     if (game.players.length < 2) return;
     setGame((old) => ({ ...old, phase: 'playing', turnIndex: 0, winnerId: null, players: shufflePlayers(old.players).map((p) => ({ ...p, score: 0, misses: 0, eliminated: false })) }));
@@ -112,7 +124,7 @@ export default function App() {
         <form onSubmit={addPlayer} className="add-form"><input aria-label="Player or team name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Player or team name" maxLength={30}/><button aria-label="Add player"><Plus size={22}/></button></form>
         <div className="player-list">
           {game.players.length === 0 && <div className="empty"><UserRound/><p>Your throwing order will appear here.</p></div>}
-          {game.players.map((player, index) => <div className="setup-player" key={player.id}><span className="order">{index + 1}</span><strong>{player.name}</strong>{player.wins > 0 && <span className="wins"><Trophy size={14}/>{player.wins}</span>}<button onClick={() => removePlayer(player.id)} aria-label={`Remove ${player.name}`}><X size={19}/></button></div>)}
+          {game.players.map((player, index) => <div className="setup-player" key={player.id}><span className="order">{index + 1}</span>{player.photo ? <img className="player-avatar" src={player.photo} alt="" /> : <span className="player-avatar placeholder"><UserRound size={15}/></span>}<strong>{player.name}</strong>{player.wins > 0 && <span className="wins"><Trophy size={14}/>{player.wins}</span>}<label className="photo-button" aria-label={`Take a picture of ${player.name}`}><Camera size={17}/><input type="file" accept="image/*" capture="user" onChange={(event) => updatePlayerPhoto(player.id, event)} /></label><button onClick={() => removePlayer(player.id)} aria-label={`Remove ${player.name}`}><X size={19}/></button></div>)}
         </div>
       </section>
       <button className="primary start" disabled={game.players.length < 2} onClick={startGame}>Start game <ChevronRight/></button>
@@ -144,7 +156,7 @@ export default function App() {
           <div className="actions"><button className={`miss-button ${isMiss ? 'chosen' : ''}`} onClick={recordMiss}><X size={22}/> Record miss</button><button className="confirm-button" disabled={!isMiss && selected.length === 0} onClick={confirmThrow}>Confirm {isMiss || selected.length ? `+${throwScore}` : ''}<ChevronRight size={22}/></button></div>
         </section>
         <aside className={`card scoreboard ${showAllScores ? 'expanded' : ''}`}><div className="section-heading"><div><p className="eyebrow">Throwing order</p><h2>Scoreboard</h2></div><span className="scoreboard-active">{game.players.filter((player) => !player.eliminated).length} active</span><span className="scoreboard-next">Next: {nextThrower?.name ?? '—'}</span></div>
-          {rankedPlayers.map(({player, index}) => <div className={`score-row ${index === game.turnIndex ? 'current' : ''} ${player.eliminated ? 'eliminated' : ''}`} key={player.id}><span className="order">{index+1}</span><div className="player-meta"><strong>{player.name}</strong><small>{player.eliminated ? 'Eliminated' : player.misses ? `${player.misses}/3 misses` : `${player.wins} ${player.wins === 1 ? 'win' : 'wins'}`}</small></div><b className="player-score">{player.score}</b></div>)}
+          {rankedPlayers.map(({player, index}) => <div className={`score-row ${index === game.turnIndex ? 'current' : ''} ${player.eliminated ? 'eliminated' : ''}`} key={player.id}><span className="order">{index+1}</span>{player.photo ? <img className="player-avatar" src={player.photo} alt="" /> : <span className="player-avatar placeholder"><UserRound size={15}/></span>}<div className="player-meta"><strong>{player.name}</strong><small>{player.eliminated ? 'Eliminated' : player.misses ? `${player.misses}/3 misses` : `${player.wins} ${player.wins === 1 ? 'win' : 'wins'}`}</small></div><b className="player-score">{player.score}</b></div>)}
           <button className="scores-toggle" onClick={() => setShowAllScores((shown) => !shown)} aria-expanded={showAllScores}>{showAllScores ? 'Hide other scores' : 'Show all scores'}</button>
         </aside>
       </div>
