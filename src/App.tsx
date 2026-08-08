@@ -25,18 +25,31 @@ function nextActivePlayer(players: Player[], from: number): number {
   return from;
 }
 
+/** Creates a new, unbiased throwing order without mutating the saved line-up. */
+function shufflePlayers(players: Player[]): Player[] {
+  const shuffled = [...players];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
 export default function App() {
   const [game, setGame] = useState<GameState>(loadState);
   const [name, setName] = useState('');
   const [selected, setSelected] = useState<number[]>([]);
   const [isMiss, setIsMiss] = useState(false);
+  const [showAllScores, setShowAllScores] = useState(false);
 
   useEffect(() => localStorage.setItem(STORAGE_KEY, JSON.stringify(game)), [game]);
 
   const current = game.players[game.turnIndex];
   const throwScore = isMiss ? 0 : selected.length === 1 ? selected[0] : selected.length;
-  const activeCount = game.players.filter((player) => !player.eliminated).length;
   const winner = game.players.find((player) => player.id === game.winnerId);
+  const nextThrower = game.players.length > 1
+    ? game.players[nextActivePlayer(game.players, game.turnIndex)]
+    : undefined;
 
   const rankedPlayers = useMemo(() => game.players.map((player, index) => ({ player, index })), [game.players]);
 
@@ -54,8 +67,8 @@ export default function App() {
 
   function startGame() {
     if (game.players.length < 2) return;
-    setGame((old) => ({ ...old, phase: 'playing', turnIndex: 0, winnerId: null, players: old.players.map((p) => ({ ...p, score: 0, misses: 0, eliminated: false })) }));
-    setSelected([]); setIsMiss(false);
+    setGame((old) => ({ ...old, phase: 'playing', turnIndex: 0, winnerId: null, players: shufflePlayers(old.players).map((p) => ({ ...p, score: 0, misses: 0, eliminated: false })) }));
+    setSelected([]); setIsMiss(false); setShowAllScores(false);
   }
 
   function toggleSkittle(value: number) {
@@ -93,7 +106,7 @@ export default function App() {
   if (game.phase === 'setup') return (
     <main className="shell setup-shell">
       <header className="brand"><Logo /><div><p className="eyebrow">Garden game companion</p><h1>Mölkky</h1></div></header>
-      <section className="hero"><p className="kicker">First to exactly</p><div className="fifty">50<span>pts</span></div><p>Add your players in throwing order.</p></section>
+      <section className="hero"><p className="kicker">First to exactly</p><div className="fifty">50<span>pts</span></div><p>Add your players — the throwing order is randomized when the game starts.</p></section>
       <section className="card player-setup">
         <div className="section-heading"><div><p className="eyebrow">Line-up</p><h2>Who's playing?</h2></div><span>{game.players.length} {game.players.length === 1 ? 'player' : 'players'}</span></div>
         <form onSubmit={addPlayer} className="add-form"><input aria-label="Player or team name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Player or team name" maxLength={30}/><button aria-label="Add player"><Plus size={22}/></button></form>
@@ -121,7 +134,6 @@ export default function App() {
   return (
     <main className="game-layout">
       <header className="game-header"><div className="brand compact"><Logo /><div><p className="eyebrow">Scorekeeper</p><h1>Mölkky</h1></div></div><button className="icon-button" aria-label="Reset game" onClick={() => setGame((old) => ({ ...old, phase: 'setup' }))}><RotateCcw size={19}/></button></header>
-      <section className="turn-banner"><div><p>Now throwing</p><h2>{current.name}</h2></div><div className="score-bubble"><b>{current.score}</b><span>/ 50</span></div></section>
       <div className="game-content">
         <section className="score-panel">
           <div className="score-prompt"><div><p className="eyebrow">Select fallen skittles</p><h3>{isMiss ? 'No skittles hit' : selected.length ? `${selected.length} selected` : 'What went down?'}</h3></div><div className={`pending-score ${selected.length || isMiss ? 'active' : ''}`}><span>Score</span><b>{throwScore}</b></div></div>
@@ -131,8 +143,9 @@ export default function App() {
           <p className="rule-note">One skittle scores its number. Multiple score the number fallen.</p>
           <div className="actions"><button className={`miss-button ${isMiss ? 'chosen' : ''}`} onClick={recordMiss}><X size={22}/> Record miss</button><button className="confirm-button" disabled={!isMiss && selected.length === 0} onClick={confirmThrow}>Confirm {isMiss || selected.length ? `+${throwScore}` : ''}<ChevronRight size={22}/></button></div>
         </section>
-        <aside className="card scoreboard"><div className="section-heading"><div><p className="eyebrow">Throwing order</p><h2>Scoreboard</h2></div><span>{activeCount} active</span></div>
+        <aside className={`card scoreboard ${showAllScores ? 'expanded' : ''}`}><div className="section-heading"><div><p className="eyebrow">Throwing order</p><h2>Scoreboard</h2></div><span className="scoreboard-active">{game.players.filter((player) => !player.eliminated).length} active</span><span className="scoreboard-next">Next: {nextThrower?.name ?? '—'}</span></div>
           {rankedPlayers.map(({player, index}) => <div className={`score-row ${index === game.turnIndex ? 'current' : ''} ${player.eliminated ? 'eliminated' : ''}`} key={player.id}><span className="order">{index+1}</span><div className="player-meta"><strong>{player.name}</strong><small>{player.eliminated ? 'Eliminated' : player.misses ? `${player.misses}/3 misses` : `${player.wins} ${player.wins === 1 ? 'win' : 'wins'}`}</small></div><b className="player-score">{player.score}</b></div>)}
+          <button className="scores-toggle" onClick={() => setShowAllScores((shown) => !shown)} aria-expanded={showAllScores}>{showAllScores ? 'Hide other scores' : 'Show all scores'}</button>
         </aside>
       </div>
     </main>
